@@ -1,8 +1,10 @@
 <!--
   LP Agro Sebrae RS · versão estilo Apple
   Uso: colar inteiro num widget HTML do Elementor (seção full width, sem padding, largura total).
+  Importante: a seção do Elementor NÃO pode ter overflow hidden, senão a nav e o hero expansível não grudam no topo.
   Escopo: .agr-*  ·  Paleta MIV Sebrae Agro: #6DC067 / #38663D
-  Sistema de forma: tiles 28px · imagens 28px · botões e chips em pílula
+  Forma: tiles 28px · botões e chips em pílula
+  Efeitos adaptados do React Bits para JS puro: ScrollExpand (hero), SpotlightCard, AnimatedContent, FoldText (números)
 -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.css">
@@ -22,7 +24,6 @@
   --agr-faint:#A9B3AB;
   --agr-radius:28px;
   --agr-ease:cubic-bezier(.22,1,.36,1);
-  --agr-spring:cubic-bezier(.34,1.2,.64,1);
   font-family:'Figtree',-apple-system,BlinkMacSystemFont,system-ui,sans-serif !important;
   color:var(--agr-ink);
   background:var(--agr-bg);
@@ -37,11 +38,11 @@
 .agr-lp ul{list-style:none;margin:0;padding:0}
 .agr-wrap{width:100%;max-width:1080px;margin:0 auto;padding:0 22px}
 
-/* Tipografia com tracking por tamanho */
-.agr-lp .agr-display{font-size:clamp(40px,7vw,80px) !important;line-height:1.02 !important;font-weight:800 !important;letter-spacing:-.035em;color:var(--agr-ink) !important}
+/* Tipografia */
+.agr-lp .agr-display{font-size:clamp(38px,6.4vw,76px) !important;line-height:1.02 !important;font-weight:800 !important;letter-spacing:-.035em;color:inherit !important}
 .agr-lp .agr-title{font-size:clamp(34px,5vw,56px) !important;line-height:1.06 !important;font-weight:800 !important;letter-spacing:-.03em;color:var(--agr-ink) !important}
-.agr-lp .agr-lead{font-size:clamp(19px,2vw,24px) !important;line-height:1.45 !important;font-weight:500 !important;letter-spacing:-.01em;color:var(--agr-muted) !important}
-.agr-lp .agr-kicker{font-size:clamp(19px,1.8vw,22px) !important;font-weight:700 !important;letter-spacing:-.01em;color:var(--agr-forest) !important;margin-bottom:12px}
+.agr-lp .agr-lead{font-size:clamp(18px,2vw,23px) !important;line-height:1.45 !important;font-weight:500 !important;letter-spacing:-.01em;color:var(--agr-muted) !important}
+.agr-lp .agr-kicker{font-size:clamp(18px,1.8vw,21px) !important;font-weight:700 !important;letter-spacing:-.01em;color:var(--agr-forest) !important;margin-bottom:12px}
 .agr-center{text-align:center;margin-left:auto;margin-right:auto}
 
 /* Botões */
@@ -61,7 +62,7 @@
 .agr-lp .agr-link i{font-size:15px;transition:transform .3s var(--agr-ease)}
 .agr-lp .agr-link:hover i{transform:translateX(3px)}
 .agr-lp .agr-link:hover span{text-decoration:underline;text-underline-offset:3px}
-.agr-lp .agr-btn:focus-visible,.agr-lp .agr-link:focus-visible,.agr-lp .agr-plus:focus-visible,.agr-lp .agr-nav a:focus-visible{outline:3px solid var(--agr-green);outline-offset:3px}
+.agr-lp .agr-btn:focus-visible,.agr-lp .agr-link:focus-visible,.agr-lp .agr-nav a:focus-visible{outline:3px solid var(--agr-green);outline-offset:3px}
 
 /* Nav local fosca */
 .agr-nav{position:sticky;top:0;z-index:40;
@@ -75,92 +76,87 @@
 .agr-lp .agr-nav__links>a:not(.agr-btn):hover{color:var(--agr-ink) !important}
 .agr-lp .agr-nav .agr-btn{padding:7px 14px;font-size:14px !important}
 
-/* Hero */
-.agr-hero{padding:88px 0 0;text-align:center}
-.agr-lp .agr-hero .agr-lead{max-width:720px;margin:24px auto 0}
-.agr-hero__ctas{display:flex;align-items:center;justify-content:center;gap:28px;flex-wrap:wrap;margin-top:36px}
-.agr-hero__media{margin:64px auto 0;max-width:1240px;padding:0 22px}
-.agr-hero__img{aspect-ratio:21/9;border-radius:var(--agr-radius);overflow:hidden;background:var(--agr-mint)}
-.agr-hero__img img{width:100%;height:100%;object-fit:cover}
+/* ---------- HERO EXPANSÍVEL (ScrollExpand) ---------- */
+.agr-xp__track{position:relative;width:100%;height:280vh}
+.agr-xp__stage{position:sticky;top:0;width:100%;height:100vh;overflow:hidden}
+.agr-xp__frame{position:absolute;inset:0;background:var(--agr-deep);
+  clip-path:inset(8% 5% 8% 5% round 28px);will-change:clip-path}
+.agr-xp__media{position:absolute;inset:0;width:100%;height:100% !important;object-fit:cover;
+  transform:scale(1.2);transform-origin:center;will-change:transform;user-select:none;-webkit-user-drag:none}
+.agr-xp__shade{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(10,24,14,.62) 0%,rgba(10,24,14,.52) 45%,rgba(10,24,14,.70) 100%)}
+.agr-xp__scrim{position:absolute;inset:0;pointer-events:none;opacity:0;
+  background:linear-gradient(to top,rgba(10,24,14,.85),rgba(10,24,14,.25) 50%,rgba(10,24,14,.5))}
+.agr-xp__overlay,.agr-xp__title{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:0 8%;color:#fff;will-change:opacity,transform}
+.agr-xp__overlay{opacity:0;pointer-events:none}
+.agr-xp__title>div{max-width:780px}
+.agr-lp .agr-xp__title .agr-kicker{color:var(--agr-green) !important}
+.agr-lp .agr-xp__title .agr-lead{color:rgba(255,255,255,.84) !important;max-width:680px;margin:22px auto 0}
+.agr-lp .agr-xp__title .agr-link{color:#fff !important}
+.agr-xp__ctas{display:flex;align-items:center;justify-content:center;gap:28px;flex-wrap:wrap;margin-top:32px}
+.agr-lp .agr-xp__overlay .agr-title{color:#fff !important;max-width:820px}
+.agr-lp .agr-xp__overlay .agr-lead{color:rgba(255,255,255,.84) !important;max-width:760px;margin-top:24px}
+.agr-xp__title .agr-kicker,.agr-xp__title .agr-display,.agr-xp__title .agr-lead,.agr-xp__ctas{opacity:0;animation:agr-rise 1s var(--agr-ease) forwards}
+.agr-xp__title .agr-display{animation-delay:.08s}
+.agr-xp__title .agr-lead{animation-delay:.16s}
+.agr-xp__ctas{animation-delay:.24s}
 
 /* Seções */
 .agr-sec{padding:120px 0}
 .agr-sec--tight{padding-top:0}
 
-/* 40 anos */
-.agr-about__text{max-width:820px}
-.agr-lp .agr-about__text .agr-lead{margin-top:28px}
-.agr-about__img{margin-top:64px;border-radius:var(--agr-radius);overflow:hidden;background:var(--agr-surface)}
-.agr-about__img img{width:100%}
-
-/* Números */
-.agr-lp .agr-numbers h3{font-size:clamp(28px,3.4vw,40px) !important;font-weight:800 !important;letter-spacing:-.025em;text-align:center;margin-bottom:40px;color:var(--agr-ink) !important}
-.agr-numbers__grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.agr-numbers__tile{background:var(--agr-surface);border-radius:var(--agr-radius);padding:28px;display:grid;place-items:center}
-.agr-numbers__tile--wide{grid-column:1 / -1}
-
-/* Frentes: bento */
-.agr-fronts__head{max-width:820px;margin-bottom:56px}
-.agr-lp .agr-fronts__head .agr-lead{margin-top:24px}
-.agr-bento{display:grid;grid-template-columns:repeat(6,1fr);gap:20px}
-.agr-tile{position:relative;border-radius:var(--agr-radius);padding:40px 40px 96px;overflow:hidden;min-height:420px;
-  display:flex;flex-direction:column;background:var(--agr-surface);color:var(--agr-ink)}
-.agr-tile--a{grid-column:span 4;background:var(--agr-deep);color:#fff}
-.agr-tile--b{grid-column:span 2;background:var(--agr-mint)}
-.agr-tile--c{grid-column:span 3}
-.agr-tile--d{grid-column:span 3;background:var(--agr-forest);color:#fff}
-.agr-tile__icon{font-size:44px;margin-bottom:28px;color:var(--agr-forest)}
-.agr-tile--a .agr-tile__icon,.agr-tile--d .agr-tile__icon{color:var(--agr-green)}
-.agr-lp .agr-tile h3{font-size:clamp(26px,2.6vw,34px) !important;line-height:1.1 !important;font-weight:800 !important;letter-spacing:-.025em;color:inherit !important;max-width:14ch}
-.agr-lp .agr-tile__label{margin-top:auto;padding-top:32px;font-size:14px !important;font-weight:600 !important;opacity:.7;margin-bottom:12px}
-.agr-tile .agr-chips li{background:rgba(17,26,19,.06)}
-.agr-tile--a .agr-chips li,.agr-tile--d .agr-chips li{background:rgba(255,255,255,.12);color:#fff}
-.agr-tile--a::after{z-index:0;content:"";position:absolute;right:-140px;bottom:-160px;width:420px;height:420px;border-radius:50%;
-  background:radial-gradient(circle,rgba(109,192,103,.30),transparent 70%);pointer-events:none}
-.agr-chips{display:flex;flex-wrap:wrap;gap:8px}
-.agr-chips li{padding:8px 14px;border-radius:999px;font-size:15px;font-weight:600;letter-spacing:-.005em}
-.agr-lp .agr-plus{
-  position:absolute;right:24px;bottom:24px;width:44px;height:44px;border-radius:50%;border:0;cursor:pointer;
-  display:grid;place-items:center;font-size:22px;
-  background:var(--agr-ink);color:#fff;
-  transition:transform .1s ease-out,background-color .2s;-webkit-tap-highlight-color:transparent}
-.agr-lp .agr-plus:hover{background:#26332A}
-.agr-lp .agr-plus:active{transform:scale(.92)}
-.agr-lp .agr-tile--a .agr-plus,.agr-lp .agr-tile--d .agr-plus{background:#fff;color:var(--agr-ink)}
-.agr-lp .agr-tile--a .agr-plus:hover,.agr-lp .agr-tile--d .agr-plus:hover{background:var(--agr-mint)}
-
-/* Spotlight (adaptado do SpotlightCard do React Bits) */
-.agr-spot{--mouse-x:50%;--mouse-y:50%;--spotlight-color:rgba(109,192,103,.28);isolation:isolate}
+/* Spotlight (SpotlightCard) */
+.agr-spot{--mouse-x:50%;--mouse-y:50%;--spotlight-color:rgba(109,192,103,.28);isolation:isolate;position:relative;overflow:hidden}
 .agr-spot::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;border-radius:inherit;
   background:radial-gradient(circle at var(--mouse-x) var(--mouse-y),var(--spotlight-color),transparent 80%);
   opacity:0;transition:opacity .5s ease}
 .agr-spot:hover::before,.agr-spot:focus-within::before{opacity:.6}
 .agr-spot>*{position:relative;z-index:1}
-.agr-spot>.agr-plus{position:absolute;z-index:2}
-.agr-tile--a.agr-spot,.agr-tile--d.agr-spot,.agr-wpp__card.agr-spot{--spotlight-color:rgba(109,192,103,.55)}
-.agr-numbers__tile{position:relative;overflow:hidden}
+.agr-spot--dark{--spotlight-color:rgba(109,192,103,.55)}
 
-/* Painel (dialog) */
-.agr-sheet{border:0;padding:0;margin:auto;width:min(720px,calc(100% - 32px));max-height:calc(100dvh - 64px);
-  border-radius:var(--agr-radius);background:var(--agr-surface);color:var(--agr-ink);
-  box-shadow:0 40px 100px -30px rgba(15,36,20,.45);overflow:auto;
-  font-family:'Figtree',-apple-system,sans-serif}
-.agr-sheet::backdrop{background:rgba(15,36,20,.35);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
-.agr-sheet[open]{animation:agr-sheet-in .5s var(--agr-spring)}
-.agr-sheet.is-closing{animation:agr-sheet-out .22s ease-in forwards}
-.agr-sheet[open]::backdrop{animation:agr-fade .3s ease}
-.agr-sheet.is-closing::backdrop{animation:agr-fade .22s ease reverse forwards}
-.agr-sheet__in{padding:56px 56px 48px;position:relative}
-.agr-sheet__icon{font-size:48px;color:var(--agr-forest);margin-bottom:20px}
-.agr-sheet h3{font-size:clamp(28px,3.4vw,40px);line-height:1.08;font-weight:800;letter-spacing:-.03em;margin:0}
-.agr-sheet p{margin:20px 0 0;font-size:19px;line-height:1.6;color:var(--agr-muted);letter-spacing:-.005em}
-.agr-sheet h4{margin:36px 0 14px;font-size:15px;font-weight:700;color:var(--agr-forest)}
-.agr-sheet .agr-chips li{background:var(--agr-mint);color:var(--agr-ink)}
-.agr-sheet__close{position:absolute;top:18px;right:18px;width:40px;height:40px;border-radius:50%;border:0;cursor:pointer;
-  display:grid;place-items:center;font-size:20px;background:rgba(17,26,19,.07);color:var(--agr-ink);transition:background-color .2s,transform .1s ease-out}
-.agr-sheet__close:hover{background:rgba(17,26,19,.12)}
-.agr-sheet__close:active{transform:scale(.92)}
-.agr-sheet__close:focus-visible{outline:3px solid var(--agr-green);outline-offset:2px}
+/* ---------- NÚMEROS (FoldText) ---------- */
+.agr-numbers__head{margin-bottom:48px}
+.agr-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.agr-stat{border-radius:var(--agr-radius);padding:36px 30px 32px;min-height:260px;display:flex;flex-direction:column;justify-content:space-between;background:var(--agr-surface)}
+.agr-stat--deep{background:var(--agr-deep);color:#fff}
+.agr-stat--mint{background:var(--agr-mint)}
+.agr-stat--forest{background:var(--agr-forest);color:#fff}
+.agr-stat__icon{font-size:30px;color:var(--agr-forest)}
+.agr-stat--deep .agr-stat__icon,.agr-stat--forest .agr-stat__icon{color:var(--agr-green)}
+.agr-stat__num{display:block;margin-top:40px;font-size:clamp(48px,5.4vw,72px);font-weight:800;letter-spacing:-.045em;line-height:.95;color:var(--agr-forest)}
+.agr-stat--deep .agr-stat__num,.agr-stat--forest .agr-stat__num{color:var(--agr-green)}
+.agr-lp .agr-stat__label{margin-top:14px;font-size:17px !important;line-height:1.4 !important;font-weight:600 !important;color:inherit !important;opacity:.8}
+
+/* FoldText: peças dobráveis */
+.agr-fold-sr{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.agr-fold-seg{display:inline-block;perspective:700px;transform-style:preserve-3d;vertical-align:baseline}
+.agr-fold-piece{position:relative;display:inline-block;transform-style:preserve-3d;backface-visibility:hidden;transform-origin:50% 0%;--fold-crease:0}
+.agr-fold-piece::after{content:"";position:absolute;inset:-.08em -.02em;pointer-events:none;opacity:var(--fold-crease,0);mix-blend-mode:multiply;border-radius:.08em;
+  background:linear-gradient(180deg,rgba(0,0,0,.58) 0%,rgba(0,0,0,.22) 42%,rgba(255,255,255,.26) 100%)}
+
+/* ---------- FRENTES (bento com texto aberto) ---------- */
+.agr-fronts__head{max-width:820px;margin-bottom:56px}
+.agr-lp .agr-fronts__head .agr-lead{margin-top:24px}
+.agr-bento{display:grid;grid-template-columns:repeat(6,1fr);gap:20px}
+.agr-tile{border-radius:var(--agr-radius);padding:40px;display:flex;flex-direction:column;background:var(--agr-bg);color:var(--agr-ink)}
+.agr-tile--a{grid-column:span 4;background:var(--agr-deep);color:#fff}
+.agr-tile--b{grid-column:span 2;background:var(--agr-mint)}
+.agr-tile--c{grid-column:span 3}
+.agr-tile--d{grid-column:span 3;background:var(--agr-forest);color:#fff}
+.agr-tile__icon{font-size:40px;margin-bottom:24px;color:var(--agr-forest)}
+.agr-tile--a .agr-tile__icon,.agr-tile--d .agr-tile__icon{color:var(--agr-green)}
+.agr-lp .agr-tile h3{font-size:clamp(24px,2.4vw,30px) !important;line-height:1.12 !important;font-weight:800 !important;letter-spacing:-.025em;color:inherit !important}
+.agr-lp .agr-tile__text{margin-top:14px;font-size:17px !important;line-height:1.6 !important;color:var(--agr-muted) !important}
+.agr-lp .agr-tile--a .agr-tile__text,.agr-lp .agr-tile--d .agr-tile__text{color:rgba(255,255,255,.78) !important}
+.agr-lp .agr-tile__label{margin-top:auto;padding-top:28px;font-size:14px !important;font-weight:700 !important;margin-bottom:12px;color:var(--agr-forest) !important}
+.agr-lp .agr-tile--a .agr-tile__label,.agr-lp .agr-tile--d .agr-tile__label{color:var(--agr-green) !important}
+.agr-tile--a::after{content:"";position:absolute;z-index:0;right:-140px;bottom:-160px;width:420px;height:420px;border-radius:50%;
+  background:radial-gradient(circle,rgba(109,192,103,.28),transparent 70%);pointer-events:none}
+.agr-chips{display:flex;flex-wrap:wrap;gap:8px}
+.agr-chips li{padding:8px 14px;border-radius:999px;font-size:15px;font-weight:600;letter-spacing:-.005em;background:rgba(17,26,19,.06)}
+.agr-tile--a .agr-chips li,.agr-tile--d .agr-chips li{background:rgba(255,255,255,.12);color:#fff}
+.agr-tile--b .agr-chips li{background:rgba(56,102,61,.12)}
 
 /* Missões */
 .agr-missions{text-align:center}
@@ -174,7 +170,7 @@
 .agr-countries.is-visible li:nth-child(odd){color:var(--agr-forest)}
 
 /* WhatsApp */
-.agr-wpp__card{border-radius:var(--agr-radius);background:var(--agr-deep);color:#fff;overflow:hidden;
+.agr-wpp__card{border-radius:var(--agr-radius);background:var(--agr-deep);color:#fff;
   display:grid;grid-template-columns:1.1fr .9fr;align-items:center}
 .agr-wpp__text{padding:72px 64px}
 .agr-wpp__icon{font-size:48px;color:var(--agr-green);margin-bottom:24px;display:block}
@@ -198,61 +194,50 @@
 
 /* Motion */
 @keyframes agr-rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
-@keyframes agr-sheet-in{from{opacity:0;transform:scale(.94) translateY(16px)}to{opacity:1;transform:none}}
-@keyframes agr-sheet-out{to{opacity:0;transform:scale(.96) translateY(8px)}}
-@keyframes agr-fade{from{opacity:0}to{opacity:1}}
-@keyframes agr-grow{from{transform:scale(.9);border-radius:48px}to{transform:scale(1);border-radius:var(--agr-radius)}}
-.agr-hero .agr-kicker,.agr-hero .agr-display,.agr-hero .agr-lead,.agr-hero__ctas{opacity:0;animation:agr-rise 1s var(--agr-ease) forwards}
-.agr-hero .agr-display{animation-delay:.08s}
-.agr-hero .agr-lead{animation-delay:.16s}
-.agr-hero__ctas{animation-delay:.24s}
 .agr-reveal{opacity:0;transform:translateY(32px);transition:opacity 1s var(--agr-ease),transform 1s var(--agr-ease);transition-delay:calc(var(--i,0) * 90ms)}
 .agr-reveal.is-visible{opacity:1;transform:none}
-/* Imagem do hero cresce conforme entra na tela (só em navegadores com scroll-driven animations) */
-@supports (animation-timeline:view()){
-  .agr-hero__img{animation:agr-grow linear both;animation-timeline:view();animation-range:entry 0% cover 45%}
-}
 
 @media (prefers-reduced-motion:reduce){
-  .agr-hero .agr-kicker,.agr-hero .agr-display,.agr-hero .agr-lead,.agr-hero__ctas{animation:none;opacity:1}
-  .agr-hero__img{animation:none !important}
+  .agr-xp__title .agr-kicker,.agr-xp__title .agr-display,.agr-xp__title .agr-lead,.agr-xp__ctas{animation:none;opacity:1}
   .agr-reveal{opacity:1;transform:none;transition:opacity .3s}
-  .agr-sheet[open],.agr-sheet.is-closing{animation:agr-fade .2s ease}
-  .agr-sheet.is-closing{animation-direction:reverse}
   .agr-countries li{transition-delay:0s !important}
+  .agr-fold-piece{transform:none !important}
+  .agr-fold-piece::after{opacity:0 !important}
 }
 @media (prefers-reduced-transparency:reduce){
   .agr-nav{background:var(--agr-bg);-webkit-backdrop-filter:none;backdrop-filter:none}
-  .agr-sheet::backdrop{background:rgba(15,36,20,.6);-webkit-backdrop-filter:none;backdrop-filter:none}
 }
 
 /* Responsivo */
 @media (max-width:1024px){
+  .agr-stats{grid-template-columns:1fr 1fr}
   .agr-bento{grid-template-columns:1fr 1fr}
-  .agr-tile--a,.agr-tile--b,.agr-tile--c,.agr-tile--d{grid-column:span 1}
-  .agr-tile--a{grid-column:1 / -1}
-  .agr-tile--d{grid-column:1 / -1}
+  .agr-tile--a,.agr-tile--d{grid-column:1 / -1}
+  .agr-tile--b,.agr-tile--c{grid-column:span 1}
   .agr-wpp__card{grid-template-columns:1fr}
   .agr-wpp__media{order:-1;min-height:0;max-height:380px}
 }
 @media (max-width:767px){
   .agr-wrap{padding:0 16px}
   .agr-nav__links>a:not(.agr-btn){display:none}
-  .agr-hero{padding-top:56px}
-  .agr-hero__ctas{flex-direction:column;gap:18px}
-  .agr-hero__media{margin-top:44px;padding:0 16px}
-  .agr-hero__img{aspect-ratio:4/5}
+  .agr-xp__frame{clip-path:inset(6% 3% 6% 3% round 24px)}
+  .agr-xp__overlay,.agr-xp__title{padding:0 9%}
+  .agr-lp .agr-xp__title .agr-lead,.agr-lp .agr-xp__overlay .agr-lead{font-size:17px !important}
+  .agr-xp__ctas{flex-direction:column;gap:16px;margin-top:26px}
   .agr-sec{padding:80px 0}
   .agr-sec--tight{padding-top:0}
-  .agr-about__img{margin-top:40px}
-  .agr-numbers__grid{grid-template-columns:1fr}
+  .agr-stats{gap:14px}
+  .agr-stat{min-height:200px;padding:26px 22px}
+  .agr-stat__num{margin-top:28px}
   .agr-bento{grid-template-columns:1fr;gap:14px}
-  .agr-tile,.agr-tile--a,.agr-tile--d{grid-column:auto;min-height:0;padding:32px 28px 88px}
-  .agr-sheet__in{padding:48px 24px 36px}
+  .agr-tile,.agr-tile--a,.agr-tile--b,.agr-tile--c,.agr-tile--d{grid-column:auto;padding:30px 26px}
   .agr-missions__label{margin-top:48px}
   .agr-wpp__text{padding:40px 28px 48px}
   .agr-lp .agr-wpp .agr-btn{white-space:normal;text-align:left}
   .agr-foot__top{flex-direction:column;align-items:flex-start}
+}
+@media (max-width:480px){
+  .agr-stats{grid-template-columns:1fr}
 }
 </style>
 
@@ -263,6 +248,7 @@
     <div class="agr-wrap agr-nav__in">
       <span class="agr-nav__title">Sebrae RS Agro</span>
       <div class="agr-nav__links">
+        <a href="#agr-numeros">Números</a>
         <a href="#agr-atuacao">Atuação</a>
         <a href="#agr-missoes">Missões</a>
         <a class="agr-btn" href="#agr-whatsapp">WhatsApp</a>
@@ -270,45 +256,58 @@
     </div>
   </nav>
 
-  <!-- HERO -->
-  <header class="agr-hero">
-    <div class="agr-wrap">
-      <p class="agr-kicker">Sebrae RS Agro</p>
-      <h1 class="agr-display">Mais produtividade e resultado no campo gaúcho.</h1>
-      <p class="agr-lead">O Sebrae RS está junto de quem faz o agro acontecer. Nossas soluções são pensadas para a realidade do campo e o crescimento sustentável das propriedades, com inovação e eficiência.</p>
-      <div class="agr-hero__ctas">
-        <a class="agr-btn" href="#agr-whatsapp">Receber no WhatsApp</a>
-        <a class="agr-link" href="#agr-atuacao"><span>Conheça nossa atuação</span><i class="ph ph-caret-right"></i></a>
-      </div>
-    </div>
-    <div class="agr-hero__media">
-      <div class="agr-hero__img">
-        <img src="https://conhecimento.sebraers.com.br/wp-content/uploads/2026/08/AdobeStock_162456369-02-1.png" alt="Lavoura no campo gaúcho" fetchpriority="high">
+  <!-- HERO EXPANSÍVEL: a foto abre até ocupar a tela e revela o bloco dos 40 anos -->
+  <header class="agr-xp" data-agr-xp>
+    <div class="agr-xp__track">
+      <div class="agr-xp__stage">
+        <div class="agr-xp__frame">
+          <img class="agr-xp__media" src="https://conhecimento.sebraers.com.br/wp-content/uploads/2026/08/AdobeStock_162456369-02-1.png" alt="Lavoura no campo gaúcho" fetchpriority="high" draggable="false">
+          <div class="agr-xp__shade"></div>
+          <div class="agr-xp__scrim"></div>
+          <div class="agr-xp__overlay">
+            <h2 class="agr-title">Mais de 40 anos lado a lado com quem produz.</h2>
+            <p class="agr-lead">O Sebrae RS é parceiro estratégico dos produtores rurais gaúchos, ajudando a transformar propriedades em negócios mais prósperos e sustentáveis. A gente acredita no potencial de cada região e trabalha com soluções que respeitam as particularidades do campo, sempre com foco em aumentar a produtividade e gerar mais resultado.</p>
+          </div>
+        </div>
+        <div class="agr-xp__title">
+          <div>
+            <p class="agr-kicker">Sebrae RS Agro</p>
+            <h1 class="agr-display">Mais produtividade e resultado no campo gaúcho.</h1>
+            <p class="agr-lead">O Sebrae RS está junto de quem faz o agro acontecer. Nossas soluções são pensadas para a realidade do campo e o crescimento sustentável das propriedades, com inovação e eficiência.</p>
+            <div class="agr-xp__ctas">
+              <a class="agr-btn agr-btn--light" href="#agr-whatsapp">Receber no WhatsApp</a>
+              <a class="agr-link" href="#agr-atuacao"><span>Conheça nossa atuação</span><i class="ph ph-caret-right"></i></a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </header>
 
-  <!-- 40 ANOS -->
-  <section class="agr-sec">
-    <div class="agr-wrap">
-      <div class="agr-about__text agr-center agr-reveal">
-        <h2 class="agr-title">Mais de 40 anos lado a lado com quem produz.</h2>
-        <p class="agr-lead">O Sebrae RS é parceiro estratégico dos produtores rurais gaúchos, ajudando a transformar propriedades em negócios mais prósperos e sustentáveis. A gente acredita no potencial de cada região e trabalha com soluções que respeitam as particularidades do campo, sempre com foco em aumentar a produtividade e gerar mais resultado.</p>
-      </div>
-      <div class="agr-about__img" data-agr-anim>
-        <img src="https://conhecimento.sebraers.com.br/wp-content/uploads/2025/11/agro_assets-01.png" alt="Sebrae RS no agro gaúcho" loading="lazy">
-      </div>
-    </div>
-  </section>
-
   <!-- NÚMEROS -->
-  <section class="agr-sec agr-sec--tight agr-numbers">
+  <!-- TROCAR: preencher número e descrição de cada box com os dados das imagens agro_dados. Pode duplicar ou apagar boxes. -->
+  <section class="agr-sec" id="agr-numeros">
     <div class="agr-wrap">
-      <h3 class="agr-reveal">Nosso impacto em números</h3>
-      <div class="agr-numbers__grid">
-        <div class="agr-numbers__tile agr-spot" data-agr-anim data-reverse><img src="https://conhecimento.sebraers.com.br/wp-content/uploads/2025/11/agro_dados-21.png" alt="Dado de impacto do Sebrae RS no agro" loading="lazy"></div>
-        <div class="agr-numbers__tile agr-spot" data-agr-anim data-delay=".22"><img src="https://conhecimento.sebraers.com.br/wp-content/uploads/2025/11/agro_dados-22.png" alt="Dado de impacto do Sebrae RS no agro" loading="lazy"></div>
-        <div class="agr-numbers__tile agr-numbers__tile--wide agr-spot" data-agr-anim data-reverse><img src="https://conhecimento.sebraers.com.br/wp-content/uploads/2025/11/agro_dados-23-1-1-1024x527.png" alt="Dados de impacto do Sebrae RS no agro" loading="lazy"></div>
+      <div class="agr-numbers__head agr-center agr-reveal">
+        <h2 class="agr-title">Nosso impacto em números</h2>
+      </div>
+      <div class="agr-stats">
+        <article class="agr-stat agr-stat--deep agr-spot agr-spot--dark" data-agr-anim>
+          <i class="ph ph-users-three agr-stat__icon" aria-hidden="true"></i>
+          <div><span class="agr-stat__num" data-agr-fold>00</span><p class="agr-stat__label">Descrição do dado 1</p></div>
+        </article>
+        <article class="agr-stat agr-stat--mint agr-spot" data-agr-anim data-delay=".22">
+          <i class="ph ph-plant agr-stat__icon" aria-hidden="true"></i>
+          <div><span class="agr-stat__num" data-agr-fold>00</span><p class="agr-stat__label">Descrição do dado 2</p></div>
+        </article>
+        <article class="agr-stat agr-spot" data-agr-anim data-delay=".34">
+          <i class="ph ph-map-trifold agr-stat__icon" aria-hidden="true"></i>
+          <div><span class="agr-stat__num" data-agr-fold>00</span><p class="agr-stat__label">Descrição do dado 3</p></div>
+        </article>
+        <article class="agr-stat agr-stat--forest agr-spot agr-spot--dark" data-agr-anim data-delay=".46">
+          <i class="ph ph-chart-line-up agr-stat__icon" aria-hidden="true"></i>
+          <div><span class="agr-stat__num" data-agr-fold>00</span><p class="agr-stat__label">Descrição do dado 4</p></div>
+        </article>
       </div>
     </div>
   </section>
@@ -322,77 +321,40 @@
       </div>
 
       <div class="agr-bento">
-        <article class="agr-tile agr-tile--a agr-spot" data-agr-anim data-reverse>
+        <article class="agr-tile agr-tile--a agr-spot agr-spot--dark" data-agr-anim>
           <i class="ph ph-plant agr-tile__icon" aria-hidden="true"></i>
           <h3>Fortalecimento por Cadeia Produtiva</h3>
+          <p class="agr-tile__text">Atuamos em cadeias estratégicas como leite, apicultura, hortifruti e grãos, promovendo inovação, sustentabilidade e acesso a mercados. Nossos projetos fortalecem territórios por meio da organização produtiva e da conexão com oportunidades.</p>
           <p class="agr-tile__label">Cadeias em destaque</p>
           <ul class="agr-chips"><li>Apicultura</li><li>Grãos</li><li>Horticultura</li><li>Leite e derivados</li><li>Olivicultura</li><li>Pecuária</li></ul>
-          <button class="agr-plus" data-sheet="agr-s1" aria-label="Saiba mais sobre Fortalecimento por Cadeia Produtiva"><i class="ph ph-plus"></i></button>
         </article>
 
         <article class="agr-tile agr-tile--b agr-spot" data-agr-anim data-delay=".22">
           <i class="ph ph-handshake agr-tile__icon" aria-hidden="true"></i>
           <h3>Programa JPA</h3>
+          <p class="agr-tile__text">Por meio do programa Juntos pelo Agro, impulsionamos a competitividade do agro gaúcho por meio de eventos técnicos e participações em feiras, levando gestão e inovação para os pequenos produtores.</p>
           <p class="agr-tile__label">Projetos em destaque</p>
           <ul class="agr-chips"><li>Participação na Expointer</li><li>Eventos Técnicos</li></ul>
-          <button class="agr-plus" data-sheet="agr-s2" aria-label="Saiba mais sobre o Programa JPA"><i class="ph ph-plus"></i></button>
         </article>
 
-        <article class="agr-tile agr-tile--c agr-spot" data-agr-anim data-reverse>
+        <article class="agr-tile agr-tile--c agr-spot" data-agr-anim>
           <i class="ph ph-seal-check agr-tile__icon" aria-hidden="true"></i>
           <h3>Valorização de Produtos com Origem</h3>
+          <p class="agr-tile__text">Apoiamos o desenvolvimento de Indicações Geográficas no RS, promovendo reconhecimento, diferencial competitivo e pertencimento territorial. São produtos com identidade, cultura, que geram valor agregado através da origem e da qualidade.</p>
           <p class="agr-tile__label">Produtos em destaque</p>
           <ul class="agr-chips"><li>Arroz</li><li>Azeite</li><li>Carne bovina</li><li>Doces</li><li>Erva-mate</li><li>Mel</li><li>Queijos artesanais</li><li>Vinhos e espumantes</li></ul>
-          <button class="agr-plus" data-sheet="agr-s3" aria-label="Saiba mais sobre Valorização de Produtos com Origem"><i class="ph ph-plus"></i></button>
         </article>
 
-        <article class="agr-tile agr-tile--d agr-spot" data-agr-anim data-delay=".22">
+        <article class="agr-tile agr-tile--d agr-spot agr-spot--dark" data-agr-anim data-delay=".22">
           <i class="ph ph-buildings agr-tile__icon" aria-hidden="true"></i>
           <h3>Integração com Grandes Empresas</h3>
+          <p class="agr-tile__text">Conectamos pequenos produtores a grandes empresas por meio de projetos de encadeamento produtivo. Essa atuação fortalece cadeias, promove desenvolvimento regional e gera oportunidades sustentáveis e colaborativas nos territórios.</p>
           <p class="agr-tile__label">Empresas parceiras</p>
           <ul class="agr-chips"><li>CCGL</li><li>Dália</li><li>Frigorífico Silva</li><li>Lactalis</li><li>Piracanjuba</li><li>Santa Clara</li></ul>
-          <button class="agr-plus" data-sheet="agr-s4" aria-label="Saiba mais sobre Integração com Grandes Empresas"><i class="ph ph-plus"></i></button>
         </article>
       </div>
     </div>
   </section>
-
-  <!-- PAINÉIS DE DETALHE -->
-  <dialog class="agr-sheet" id="agr-s1" aria-labelledby="agr-s1-t"><div class="agr-sheet__in">
-    <button class="agr-sheet__close" aria-label="Fechar"><i class="ph ph-x"></i></button>
-    <i class="ph ph-plant agr-sheet__icon" aria-hidden="true"></i>
-    <h3 id="agr-s1-t">Fortalecimento por Cadeia Produtiva</h3>
-    <p>Atuamos em cadeias estratégicas como leite, apicultura, hortifruti e grãos, promovendo inovação, sustentabilidade e acesso a mercados. Nossos projetos fortalecem territórios por meio da organização produtiva e da conexão com oportunidades.</p>
-    <h4>Cadeias em destaque</h4>
-    <ul class="agr-chips"><li>Apicultura</li><li>Grãos</li><li>Horticultura</li><li>Leite e derivados</li><li>Olivicultura</li><li>Pecuária</li></ul>
-  </div></dialog>
-
-  <dialog class="agr-sheet" id="agr-s2" aria-labelledby="agr-s2-t"><div class="agr-sheet__in">
-    <button class="agr-sheet__close" aria-label="Fechar"><i class="ph ph-x"></i></button>
-    <i class="ph ph-handshake agr-sheet__icon" aria-hidden="true"></i>
-    <h3 id="agr-s2-t">Programa JPA</h3>
-    <p>Por meio do programa Juntos pelo Agro, impulsionamos a competitividade do agro gaúcho por meio de eventos técnicos e participações em feiras, levando gestão e inovação para os pequenos produtores.</p>
-    <h4>Projetos em destaque</h4>
-    <ul class="agr-chips"><li>Participação na Expointer</li><li>Eventos Técnicos</li></ul>
-  </div></dialog>
-
-  <dialog class="agr-sheet" id="agr-s3" aria-labelledby="agr-s3-t"><div class="agr-sheet__in">
-    <button class="agr-sheet__close" aria-label="Fechar"><i class="ph ph-x"></i></button>
-    <i class="ph ph-seal-check agr-sheet__icon" aria-hidden="true"></i>
-    <h3 id="agr-s3-t">Valorização de Produtos com Origem</h3>
-    <p>Apoiamos o desenvolvimento de Indicações Geográficas no RS, promovendo reconhecimento, diferencial competitivo e pertencimento territorial. São produtos com identidade, cultura, que geram valor agregado através da origem e da qualidade.</p>
-    <h4>Produtos em destaque</h4>
-    <ul class="agr-chips"><li>Arroz</li><li>Azeite</li><li>Carne bovina</li><li>Doces</li><li>Erva-mate</li><li>Mel</li><li>Queijos artesanais</li><li>Vinhos e espumantes</li></ul>
-  </div></dialog>
-
-  <dialog class="agr-sheet" id="agr-s4" aria-labelledby="agr-s4-t"><div class="agr-sheet__in">
-    <button class="agr-sheet__close" aria-label="Fechar"><i class="ph ph-x"></i></button>
-    <i class="ph ph-buildings agr-sheet__icon" aria-hidden="true"></i>
-    <h3 id="agr-s4-t">Integração com Grandes Empresas</h3>
-    <p>Conectamos pequenos produtores a grandes empresas por meio de projetos de encadeamento produtivo. Essa atuação fortalece cadeias, promove desenvolvimento regional e gera oportunidades sustentáveis e colaborativas nos territórios.</p>
-    <h4>Empresas parceiras</h4>
-    <ul class="agr-chips"><li>CCGL</li><li>Dália</li><li>Frigorífico Silva</li><li>Lactalis</li><li>Piracanjuba</li><li>Santa Clara</li></ul>
-  </div></dialog>
 
   <!-- MISSÕES -->
   <section class="agr-sec agr-missions" id="agr-missoes">
@@ -415,7 +377,7 @@
   <!-- WHATSAPP -->
   <section class="agr-sec agr-sec--tight" id="agr-whatsapp">
     <div class="agr-wrap">
-      <div class="agr-wpp__card agr-wpp agr-spot" data-agr-anim>
+      <div class="agr-wpp__card agr-wpp agr-spot agr-spot--dark" data-agr-anim>
         <div class="agr-wpp__text">
           <i class="ph ph-whatsapp-logo agr-wpp__icon" aria-hidden="true"></i>
           <h2>Orientação para a tua propriedade, <span>direto no teu WhatsApp.</span></h2>
@@ -451,29 +413,72 @@
 <script>
 (function(){
   var root=document.querySelector('.agr-lp'); if(!root) return;
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var hasGsap=!!(window.gsap&&window.ScrollTrigger);
+  if(hasGsap) gsap.registerPlugin(ScrollTrigger);
 
-  /* Painéis: abrem a partir do botão "+" que foi clicado e fecham pelo mesmo caminho */
-  function closeSheet(d){
-    if(!d.open||d.classList.contains('is-closing')) return;
-    d.classList.add('is-closing');
-    setTimeout(function(){d.classList.remove('is-closing');d.close();},220);
-  }
-  root.querySelectorAll('.agr-plus').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      var d=document.getElementById(btn.dataset.sheet); if(!d||!d.showModal) return;
-      var r=btn.getBoundingClientRect(), vw=window.innerWidth, vh=window.innerHeight;
-      d.style.transformOrigin=((r.left+r.width/2)/vw*100)+'% '+((r.top+r.height/2)/vh*100)+'%';
-      d.showModal();
-    });
-  });
-  root.querySelectorAll('.agr-sheet').forEach(function(d){
-    d.querySelector('.agr-sheet__close').addEventListener('click',function(){closeSheet(d)});
-    d.addEventListener('click',function(e){ if(e.target===d) closeSheet(d); });
-    d.addEventListener('cancel',function(e){e.preventDefault();closeSheet(d);});
-  });
+  /* ---------- Hero expansível (adaptado do ScrollExpand do React Bits) ---------- */
+  (function(){
+    var xp=root.querySelector('[data-agr-xp]'); if(!xp) return;
+    var track=xp.querySelector('.agr-xp__track'), stage=xp.querySelector('.agr-xp__stage'),
+        frame=xp.querySelector('.agr-xp__frame'), media=xp.querySelector('.agr-xp__media'),
+        scrim=xp.querySelector('.agr-xp__scrim'), title=xp.querySelector('.agr-xp__title'),
+        overlay=xp.querySelector('.agr-xp__overlay');
+    var clamp=function(v,a,b){return v<a?a:v>b?b:v};
+    var smooth=function(e0,e1,x){var t=clamp((x-e0)/(e1-e0||1e-6),0,1);return t*t*(3-2*t)};
+    function cfg(){
+      var m=window.innerWidth<768;
+      return {startW:m?94:90,startH:m?88:84,startR:m?24:28,endR:0,zoom:1.2,dist:1.2,hold:.4,smoothing:.1,scrim:.5};
+    }
+    var c=cfg(), stageH=0, lastW=0, raf=0, cur=0, tgt=0, running=false;
 
+    function apply(p){
+      var e=smooth(0,1,p);
+      var w=c.startW+(100-c.startW)*e, h=c.startH+(100-c.startH)*e;
+      var ix=Math.max(0,(100-w)/2), iy=Math.max(0,(100-h)/2), r=c.startR+(c.endR-c.startR)*e;
+      frame.style.clipPath='inset('+iy+'% '+ix+'% '+iy+'% '+ix+'% round '+r+'px)';
+      media.style.transform='scale('+(c.zoom+(1-c.zoom)*e)+')';
+      scrim.style.opacity=c.scrim*e;
+      var out=smooth(.25,.7,p);
+      title.style.opacity=1-out;
+      title.style.transform='translate3d(0,'+(-28*out)+'px,0) scale('+(1+.04*out)+')';
+      title.style.pointerEvents=out>.5?'none':'';
+      title.style.visibility=out>=1?'hidden':'';
+      var inn=smooth(.72,1,p);
+      overlay.style.opacity=inn;
+      overlay.style.transform='translate3d(0,'+(18*(1-inn))+'px,0)';
+    }
+    function measure(){
+      c=cfg();
+      stageH=document.documentElement.clientHeight||window.innerHeight;
+      stage.style.height=stageH+'px';
+      track.style.height=(stageH*(1+c.dist+c.hold))+'px';
+      lastW=window.innerWidth;
+    }
+    function read(){ return clamp(-track.getBoundingClientRect().top/(stageH*c.dist),0,1); }
+    function tick(){
+      var k=1-Math.exp(-1/(60*c.smoothing));
+      cur+=(tgt-cur)*k;
+      if(Math.abs(tgt-cur)<.0004){cur=tgt;running=false;}
+      apply(cur);
+      raf=running?requestAnimationFrame(tick):0;
+    }
+    function onScroll(){
+      tgt=read();
+      if(reduce){cur=tgt;apply(cur);return;}
+      if(!running){running=true;if(!raf)raf=requestAnimationFrame(tick);}
+    }
+    function onResize(){
+      if(window.innerWidth===lastW) return; /* ignora a barra de endereço do celular subindo/descendo */
+      measure();tgt=cur=read();apply(cur);
+    }
+    measure();tgt=cur=read();apply(cur);
+    window.addEventListener('scroll',onScroll,{passive:true});
+    window.addEventListener('resize',onResize);
+    window.addEventListener('orientationchange',function(){setTimeout(function(){lastW=0;onResize();},200)});
+  })();
 
-  /* Spotlight nos cards (adaptado do SpotlightCard do React Bits) */
+  /* ---------- Spotlight nos cards (adaptado do SpotlightCard do React Bits) ---------- */
   root.querySelectorAll('.agr-spot').forEach(function(card){
     card.addEventListener('pointermove',function(e){
       if(e.pointerType!=='mouse') return;
@@ -483,12 +488,10 @@
     });
   });
 
-  /* Entrada dos boxes no scroll (adaptado do AnimatedContent do React Bits)
-     Config: sobe 56px · duration 1.4 · expo.out (sem quique) · opacidade 0 · scale .97 · blur 10px · threshold .2 · delay .1
-     data-delay = atraso próprio (segundos) para escalonar cards lado a lado */
-  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(window.gsap&&window.ScrollTrigger&&!reduce){
-    gsap.registerPlugin(ScrollTrigger);
+  /* ---------- Entrada dos boxes (adaptado do AnimatedContent do React Bits) ----------
+     Sobe 56px · 1.4s · expo.out · opacidade 0 · scale .97 · blur 10px · threshold .2
+     data-delay = atraso próprio (segundos) para escalonar boxes lado a lado */
+  if(hasGsap&&!reduce){
     var OPT={distance:56,duration:1.4,ease:'expo.out',initialOpacity:0,scale:.97,blur:10,threshold:.2,delay:.1};
     var mobile=window.matchMedia('(max-width:767px)').matches;
     root.querySelectorAll('[data-agr-anim]').forEach(function(el){
@@ -501,7 +504,32 @@
     });
   }
 
-  /* Reveal no scroll */
+  /* ---------- Números dobrando (adaptado do FoldText do React Bits) ----------
+     splitBy char · dobradiça no topo · 0.65s · stagger .06 · power3.out · perspective 700 · creaseShading .55 */
+  if(hasGsap&&!reduce){
+    root.querySelectorAll('[data-agr-fold]').forEach(function(el){
+      var text=el.textContent.trim();
+      el.textContent='';
+      var sr=document.createElement('span');sr.className='agr-fold-sr';sr.textContent=text;el.appendChild(sr);
+      var vis=document.createElement('span');vis.setAttribute('aria-hidden','true');
+      Array.from(text).forEach(function(ch){
+        var seg=document.createElement('span');seg.className='agr-fold-seg';
+        var piece=document.createElement('span');piece.className='agr-fold-piece';
+        piece.textContent=ch===' '?' ':ch;
+        seg.appendChild(piece);vis.appendChild(seg);
+      });
+      el.appendChild(vis);
+      var pieces=vis.querySelectorAll('.agr-fold-piece');
+      var box=el.closest('[data-agr-anim]');
+      var extra=box&&box.dataset.delay?parseFloat(box.dataset.delay):0;
+      gsap.set(pieces,{opacity:0,rotateX:-92,'--fold-crease':.55,transformOrigin:'50% 0%',force3D:true});
+      ScrollTrigger.create({trigger:el,start:'top 82%',once:true,onEnter:function(){
+        gsap.to(pieces,{opacity:1,rotateX:0,'--fold-crease':0,duration:.65,ease:'power3.out',stagger:.06,delay:.35+extra});
+      }});
+    });
+  }
+
+  /* ---------- Reveal dos textos ---------- */
   var els=root.querySelectorAll('.agr-reveal,.agr-countries');
   if(!('IntersectionObserver' in window)){els.forEach(function(el){el.classList.add('is-visible')});return;}
   var io=new IntersectionObserver(function(entries){

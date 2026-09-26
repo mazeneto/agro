@@ -5,8 +5,9 @@ Redesign da landing page institucional do **Sebrae RS Agro** ([página original]
 ## Destaques
 
 - **Nav local translúcida** com efeito fosco (`backdrop-filter`)
-- **Hero centralizado** com imagem que cresce no scroll (CSS scroll-driven animations, com fallback)
-- **Bento grid** das frentes de atuação, com painéis de detalhe (`<dialog>`) que abrem a partir do botão clicado
+- **Hero expansível**: a foto começa num quadro arredondado com o texto por cima e abre até ocupar a tela, revelando o bloco "40 anos" (adaptado do `ScrollExpand` do React Bits)
+- **Números em boxes** com os dígitos dobrando em 3D ao entrar na tela (adaptado do `FoldText` do React Bits)
+- **Bento grid** das frentes de atuação, com todo o conteúdo visível nos cards
 - **Spotlight nos cards**: brilho verde que segue o mouse (adaptado do `SpotlightCard` do [React Bits](https://reactbits.dev))
 - **Entrada dos boxes no scroll** com GSAP + ScrollTrigger (adaptado do `AnimatedContent` do React Bits)
 - **Acessível**: navegação por teclado, foco visível, respeita `prefers-reduced-motion` e `prefers-reduced-transparency`
@@ -47,4 +48,4 @@ Abre o `index.html` no navegador. Pra publicar no GitHub Pages: **Settings → P
 
 ## Créditos
 
-Conteúdo e imagens: Sebrae RS. Efeitos de spotlight e entrada adaptados de componentes do [React Bits](https://reactbits.dev) para JavaScript puro.
+Conteúdo e imagens: Sebrae RS. Efeitos de hero expansível, números dobrando, spotlight e entrada adaptados de componentes do [React Bits](https://reactbits.dev) para JavaScript puro.
