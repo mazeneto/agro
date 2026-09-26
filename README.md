@@ -20,7 +20,8 @@ lp-agro-sebrae/
 ├── index.html                    página completa (abre direto no navegador / GitHub Pages)
 ├── assets/
 │   ├── css/style.css             estilos, todos escopados em .agr-*
-│   └── js/main.js                painéis, spotlight e animações
+│   ├── js/main.js                hero expansível, spotlight e animações
+│   └── img/sebrae-agro.png       logo Sebrae Agro
 └── elementor/
     └── lp-agro-elementor.html    versão arquivo único, pronta pra colar num widget HTML do Elementor
 ```

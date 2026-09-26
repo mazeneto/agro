@@ -16,7 +16,7 @@
     var smooth=function(e0,e1,x){var t=clamp((x-e0)/(e1-e0||1e-6),0,1);return t*t*(3-2*t)};
     function cfg(){
       var m=window.innerWidth<768;
-      return {startW:m?94:90,startH:m?88:84,startR:m?24:28,endR:0,zoom:1.2,dist:1.2,hold:.4,smoothing:.1,scrim:.5};
+      return {startW:m?88:72,startH:m?80:70,startR:m?24:28,endR:0,zoom:1.2,dist:1.2,hold:.4,smoothing:.1,scrim:.5};
     }
     var c=cfg(), stageH=0, lastW=0, raf=0, cur=0, tgt=0, running=false;
 
@@ -42,6 +42,9 @@
       stage.style.height=stageH+'px';
       track.style.height=(stageH*(1+c.dist+c.hold))+'px';
       lastW=window.innerWidth;
+      /* mantém o texto do hero dentro do quadro inicial */
+      var pad=((100-c.startW)/2+(window.innerWidth<768?4:3))+'%';
+      title.style.paddingLeft=pad;title.style.paddingRight=pad;
     }
     function read(){ return clamp(-track.getBoundingClientRect().top/(stageH*c.dist),0,1); }
     function tick(){
